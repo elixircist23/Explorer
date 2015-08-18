@@ -17,24 +17,31 @@ class Explorer(Frame):
         self.parent.title("Explorer");
         self.pack(fill=BOTH, expand=1);
 
+        #FRAMES
         topFrame = Frame(self)
         topFrame.pack(side=TOP)
-
         bottomFrame = Frame(self)
         bottomFrame.pack(side=BOTTOM)
+        #DIRECTORY SEARCH BAR
+        dirLabel = Label(topFrame, text="Current Directory", bg="white")
+        dirLabel.pack(side=LEFT)
 
-        dirEntry = Entry(self)
+        dirEntry = Entry(topFrame)
+        dirEntry.insert(0, "C:/Users/" + self.userID)
         dirEntry.pack()
-        
 
+        #LISTBOX
+        scrollbar = Scrollbar(self)
+        scrollbar.pack(side=RIGHT, fill=Y)
         
-                
         listBox = Listbox(self, height=20);
         for i in self.listDir:
             listBox.insert(END, i);
+
+        listBox.config(yscrollcommand=scrollbar.set)
+        scrollbar.config(command=listBox.yview)
         
         #listBox.bind("<<ListboxSelect>>", "method");
-        
         listBox.pack(fill=BOTH, expand=1);
     
         
