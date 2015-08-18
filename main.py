@@ -23,7 +23,7 @@ class Explorer(Frame):
 		
 		#listBox.bind("<<ListboxSelect>>", "method");
 		
-		listBox.place(x = 20, y = 20);
+		listBox.place(x = 10, y = 10);
 	
 		
 def main():
