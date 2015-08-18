@@ -17,7 +17,7 @@ class Explorer(Frame):
 		self.parent.title("Explorer");
 		self.pack(fill=BOTH, expand=1);
 		
-		listBox = Listbox(self);
+		listBox = Listbox(self, height=20);
 		for i in self.listDir:
 			listBox.insert(END, i);
 		
