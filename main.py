@@ -11,16 +11,19 @@ class Explorer(Frame):
 		self.listDir = os.listdir(self.startDir);
 		self.listDirLength = len(self.listDir);
 		
+		self.initUI();
+		
 	def initUI(self):
 		self.parent.title("Explorer");
 		self.pack(fill=BOTH, expand=1);
 		
 		listBox = Listbox(self);
-		for i in listDir:
+		for i in self.listDir:
 			listBox.insert(END, i);
 		
 		#listBox.bind("<<ListboxSelect>>", "method");
 		
+		listBox.place(x = 20, y = 20);
 	
 		
 def main():
