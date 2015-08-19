@@ -18,10 +18,20 @@ class Explorer(Frame):
         self.pack(fill=BOTH, expand=1);
 
         #FRAMES
-        self.topFrame = Frame(self)
+        topFrame = Frame(self)
         topFrame.pack(side=TOP)
-        self.bottomFrame = Frame(self)
-        self.scrollbar = Scrollbar(self)
+        bottomFrame = Frame(self)
+        bottomFrame.pack(side=BOTTOM)
+        #DIRECTORY SEARCH BAR
+        dirLabel = Label(topFrame, text="Current Directory", bg="white")
+        dirLabel.pack(side=LEFT)
+
+        dirEntry = Entry(topFrame)
+        dirEntry.insert(0, self.startDir)
+        dirEntry.pack()
+
+        #LISTBOX
+        scrollbar = Scrollbar(self)
         scrollbar.pack(side=RIGHT, fill=Y)
         
         listBox = Listbox(self, height=20);
