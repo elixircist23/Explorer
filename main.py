@@ -27,7 +27,7 @@ class Explorer(Frame):
         dirLabel.pack(side=LEFT)
 
         dirEntry = Entry(topFrame)
-        dirEntry.insert(0, "C:/Users/" + self.userID)
+        dirEntry.insert(0, self.startDir)
         dirEntry.pack()
 
         #LISTBOX
