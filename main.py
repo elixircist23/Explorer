@@ -68,20 +68,22 @@ class Explorer(Frame):
         self.setCurrentDir(path);
         
         #destroy current lb to make way for the new one
-        self.lb.destroy();
+        
         
         #create new lb, but update first
         self.updateList();
+        
+        
+    #update the list
+    def updateList(self):
+        self.lb.destroy();
+        self.dirList = self.listDir();
         self.lb = Listbox(self)
         for i in self.dirList:
             self.lb.insert(END, i);
         
         self.lb.bind("<<ListboxSelect>>", self.onselect);
         self.lb.pack(side = RIGHT, fill=BOTH, expand=1, padx = 10, pady = 5);
-        
-    #update the list
-    def updateList(self):
-        self.dirList = self.listDir();
 
     def back(self):
         split = self.getCurrentDir().rsplit("\\")
@@ -89,7 +91,7 @@ class Explorer(Frame):
         for i in range(len(split) - 1):
             dirrr += split[i] + "/"
         self.setCurrentDir(dirrr)
-        
+
         print(dirrr)
 
 
