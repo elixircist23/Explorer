@@ -29,17 +29,17 @@ class Explorer(Frame):
 		#expand frame both directions
 		self.pack(fill=BOTH, expand = 1);
 		
+		#create back button
+		b = Button(self, text = "<--", command = self.goBack);
+		b.pack(side="left", padx = 5, pady = 5);
+		
 		#create listbox that holds all directories in the current directory
 		self.lb = Listbox(self)
-		for i in self.dirList:
+		for i in self.listDir():
 			self.lb.insert(END, i);
 	
 		self.lb.bind("<<ListboxSelect>>", self.onselect);
-		self.lb.pack(side = RIGHT, fill=BOTH, expand=1, padx = 10, pady = 5);
-		
-		#create back button
-		b = Button(self, text = "<--", command = self.goBack);
-		b.pack();
+		self.lb.pack(side = RIGHT, fill=BOTH, expand=1, padx = 20, pady = 20);
 				
 	#returns current working directory	
 	def getCurrentDir(self):
@@ -50,30 +50,46 @@ class Explorer(Frame):
 	def setCurrentDir(self, path):
 		os.chdir(path);
 		self.currentDir = os.getcwd()
-		self.updateList();
-		
+		self.updateList();		
 	
 	#returns a list of all directories and files in the current directory
 	def listDir(self):
-		return os.listdir(self.currentDir);
+		
+		#https://docs.python.org/2/library/errno.html#module-errno <--- FOR FILES
+		self.dirList = os.listdir(self.getCurrentDir());
+		updateListDir = [];
+		for i in range(len(self.dirList)):
+			try:
+				os.listdir(self.dirList[i])
+				updateListDir.append(self.dirList[i]);
+			except (WindowsError):
+				pass
+			
+			os.chdir(self.currentDir);
+		
+		return updateListDir;
 	
 	#when listbox element is clicked
 	def onselect(self, evt):
 		
-		#get index and value of clicked item
-		w = evt.widget
-		index = int(w.curselection()[0]);
-		value = w.get(index)
+		try:
+			#get index and value of clicked item
+			w = evt.widget
+			index = int(w.curselection()[0]);
+			value = w.get(index)
+			
+			#set new path and pass it to 'setCurrentDir', that will move us to the dir, and change self.currentDir to path
+			path = self.currentDir + '\\' + value
+			self.setCurrentDir(path);
+			
+			self.updateList();
 		
-		#set new path and pass it to 'setCurrentDir', that will move us to the dir, and change self.currentDir to path
-		path = self.currentDir + '\\' + value
-		self.setCurrentDir(path);
-		
-		self.updateList();
+		except IndexError:
+			pass;
 		
 	#update the list
 	def updateList(self):
-		self.dirList = self.listDir();
+		self.listDir();
 		self.currentDir = self.currentDir + '\\'
 		
 		#destroy current lb to make way for the new one
@@ -81,7 +97,7 @@ class Explorer(Frame):
 		
 		#create new lb, but update first
 		self.lb = Listbox(self)
-		for i in self.dirList:
+		for i in self.listDir():
 			self.lb.insert(END, i);
 		
 		self.lb.bind("<<ListboxSelect>>", self.onselect);
