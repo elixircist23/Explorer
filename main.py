@@ -91,7 +91,7 @@ class Explorer(Frame):
 	#function that goes to the directory above the current
 	def goBack(self):
 		index = self.currentDir.rfind('\\');
-		if index > 4:
+		if index > 1:
 			self.currentDir = self.currentDir[:index];
 			self.updateList();
 		
