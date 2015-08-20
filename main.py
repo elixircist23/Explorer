@@ -94,6 +94,7 @@ class Explorer(Frame):
             dirrr += split[i] + "/"
         self.setCurrentDir(dirrr)
         self.updateList()
+        self.lb.destroy()
         self.make()
 
         print(dirrr)
