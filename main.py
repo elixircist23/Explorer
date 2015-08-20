@@ -1,67 +1,107 @@
 from tkinter import *;
 import os;
 
-
+#create a class inheriting from Frame
 class Explorer(Frame):
     
+    #create constructor
     def __init__(self, parent):
         
-        Frame.__init__(self, parent, background = "white")
-        self.parent = parent
+        #starting directory always C:/Users/"user"
+        self.currentDir = "C:/Users/" + os.getlogin();
+        os.chdir(self.currentDir);
         
-        self.userID = os.getlogin()
-        self.startDir = "C:/Users/" + self.userID
-        self.listDir = os.listdir(self.startDir)
-        self.listDirLength = len(self.listDir)
+        self.dirList = self.listDir();
         
-        self.initUI()
-
-    def updateDir(self, event):
-        self.item = self.listBox.curselection()
-        print(self.item)
-        self.listDir = os.listdir(self.startDir + "/" + self.listBox.get(self.item[0]))
-        print(self.listDir)
-
-
-    def initUI(self):
-        self.parent.title("Explorer")
-        self.pack(fill=BOTH, expand=1)
-
-        #FRAMES
-        self.topFrame = Frame(self)
-        self.topFrame.pack(side=TOP)
-        self.bottomFrame = Frame(self)
-        self.bottomFrame.pack(side=BOTTOM)
-        #DIRECTORY SEARCH BAR
-        self.dirLabel = Label(self.topFrame, text="Current Directory", bg="white")
-        self.dirLabel.pack(side=LEFT)
-
-        self.dirEntry = Entry(self.topFrame)
-        self.dirEntry.insert(0, self.startDir)
-        self.dirEntry.pack()
-
-        #LISTBOX
-        self.scrollbar = Scrollbar(self)
-        self.scrollbar.pack(side=RIGHT, fill=Y)
+        #call constructor from Frame, create parent to reference object
+        Frame.__init__(self, parent, background = "white");
+        self.parent = parent;
         
-        self.listBox = Listbox(self, height=20, selectmode=SINGLE)
-        for i in self.listDir:
-            self.listBox.insert(END, i)
-
-        self.listBox.config(yscrollcommand=self.scrollbar.set)
-        self.scrollbar.config(command=self.listBox.yview)
-        
-        self.listBox.bind("<<ListboxSelect>>", self.updateDir)
-        
-
-        self.listBox.pack(fill=BOTH, expand=1)
+        #call initUI
+        self.initUI();
     
+    #initUI will be a function where all the widgets will be made and kept in
+    def initUI(self):
         
-def main():
-    root = Tk()
-    root.geometry("250x150+300+300")
-    app = Explorer(root)
-    root.mainloop()
+        #set title of window # -->(current directory)
+        self.parent.title("Explorer");
+        
+        #expand frame both directions
+        self.pack(fill=BOTH, expand = 1);
 
+        backButton = Button(self, text="Back", fg="blue", bg="white", command=self.back)
+        backButton.pack()
+        
+        #create listbox that holds all directories in the current directory
+        self.lb = Listbox(self)
+        for i in self.dirList:
+            self.lb.insert(END, i);
+    
+        self.lb.bind("<<ListboxSelect>>", self.onselect);
+        self.lb.pack(side = BOTTOM, fill=BOTH, expand=1, padx = 10, pady = 5);
+        
+    #returns current working directory
+    def getCurrentDir(self):
+        self.currentDir = os.getcwd();
+        return self.currentDir;
+    
+    #changes directory path
+    def setCurrentDir(self, path):
+        os.chdir(path);
+        self.currentDir = os.getcwd()
+        self.updateList()
+    
+    #returns a list of all directories and files in the current directory
+    def listDir(self):
+        return os.listdir(self.currentDir);
+    
+    #when listbox element is clicked
+    def onselect(self, evt):
+        
+        #get index and value of clicked item
+        w = evt.widget
+        index = int(w.curselection()[0]);
+        value = w.get(index)
+        
+        #set new path and pass it to 'setCurrentDir', that will move us to the dir, and change self.currentDir to path
+        path = self.currentDir + '/' + value
+        self.setCurrentDir(path);
+        
+        #destroy current lb to make way for the new one
+        self.lb.destroy();
+        
+        #create new lb, but update first
+        self.updateList();
+        self.lb = Listbox(self)
+        for i in self.dirList:
+            self.lb.insert(END, i);
+        
+        self.lb.bind("<<ListboxSelect>>", self.onselect);
+        self.lb.pack(side = RIGHT, fill=BOTH, expand=1, padx = 10, pady = 5);
+        
+    #update the list
+    def updateList(self):
+        self.dirList = self.listDir();
+
+    def back(self):
+        split = self.getCurrentDir().rsplit("\\")
+        dirrr = ""
+        for i in range(len(split) - 1):
+            dirrr += split[i] + "/"
+        self.setCurrentDir(dirrr)
+        
+        print(dirrr)
+
+
+def main():   
+    #create tk object
+    root = Tk();
+    #set dimesions of window
+    root.geometry("650x500+250+100");
+    #pass tk object through our class
+    app = Explorer(root);
+    #enter mainloop
+    root.mainloop();
+    
 if __name__ == '__main__':
-    main()
+    main();
