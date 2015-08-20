@@ -8,7 +8,7 @@ class Explorer(Frame):
 	def __init__(self, parent):
 		
 		#starting directory always C:/Users/"user"
-		self.currentDir = "C:/Users/" + os.getlogin();
+		self.currentDir = "C:\\Users\\" + os.getlogin();
 		os.chdir(self.currentDir);
 		
 		self.dirList = self.listDir();
@@ -37,6 +37,12 @@ class Explorer(Frame):
 		self.lb.bind("<<ListboxSelect>>", self.onselect);
 		self.lb.pack(side = RIGHT, fill=BOTH, expand=1, padx = 10, pady = 5);
 		
+		#create back button
+		b = Button(self, text = "<--", command = self.goBack);
+		b.pack();
+		
+		print(self.currentDir);
+		
 	#returns current working directory	
 	def getCurrentDir(self):
 		self.currentDir = os.getcwd();
@@ -46,6 +52,8 @@ class Explorer(Frame):
 	def setCurrentDir(self, path):
 		os.chdir(path);
 		self.currentDir = os.getcwd()
+		self.updateList();
+		
 	
 	#returns a list of all directories and files in the current directory
 	def listDir(self):
@@ -60,24 +68,31 @@ class Explorer(Frame):
 		value = w.get(index)
 		
 		#set new path and pass it to 'setCurrentDir', that will move us to the dir, and change self.currentDir to path
-		path = self.currentDir + '/' + value
+		path = self.currentDir + '\\' + value
 		self.setCurrentDir(path);
+		
+		self.updateList();
+		
+	#update the list
+	def updateList(self):
+		self.dirList = self.listDir();
 		
 		#destroy current lb to make way for the new one
 		self.lb.destroy();
 		
 		#create new lb, but update first
-		self.updateList();
 		self.lb = Listbox(self)
 		for i in self.dirList:
 			self.lb.insert(END, i);
 		
 		self.lb.bind("<<ListboxSelect>>", self.onselect);
 		self.lb.pack(side = RIGHT, fill=BOTH, expand=1, padx = 10, pady = 5);
-		
-	#update the list
-	def updateList(self):
-		self.dirList = self.listDir();
+	
+	#function that goes to the directory above the current
+	def goBack(self):
+		index = self.currentDir.rfind('\\');
+		self.currentDir = self.currentDir[:index];
+		self.updateList();
 		
 def main():
 	
