@@ -40,9 +40,7 @@ class Explorer(Frame):
 		#create back button
 		b = Button(self, text = "<--", command = self.goBack);
 		b.pack();
-		
-		print(self.currentDir);
-		
+				
 	#returns current working directory	
 	def getCurrentDir(self):
 		self.currentDir = os.getcwd();
@@ -76,6 +74,7 @@ class Explorer(Frame):
 	#update the list
 	def updateList(self):
 		self.dirList = self.listDir();
+		self.currentDir = self.currentDir + '\\'
 		
 		#destroy current lb to make way for the new one
 		self.lb.destroy();
@@ -90,10 +89,9 @@ class Explorer(Frame):
 	
 	#function that goes to the directory above the current
 	def goBack(self):
-		index = self.currentDir.rfind('\\');
-		if index > 1:
-			self.currentDir = self.currentDir[:index];
-			self.updateList();
+		#that fuckin 1-liner
+		self.setCurrentDir(self.getCurrentDir()[:self.getCurrentDir().rindex("\\")+1]);
+
 		
 def main():
 	
