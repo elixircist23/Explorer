@@ -38,7 +38,7 @@ class Explorer(Frame):
 		for i in self.listDir():
 			self.lb.insert(END, i);
 	
-		self.lb.bind("<<ListboxSelect>>", self.onselect);
+		self.lb.bind("<Double-Button-1>", self.onselect);
 		self.lb.pack(side = RIGHT, fill=BOTH, expand=1, padx = 20, pady = 20);
 				
 	#returns current working directory	
@@ -100,7 +100,7 @@ class Explorer(Frame):
 		for i in self.listDir():
 			self.lb.insert(END, i);
 		
-		self.lb.bind("<<ListboxSelect>>", self.onselect);
+		self.lb.bind("<Double-Button-1>", self.onselect);
 		self.lb.pack(side = RIGHT, fill=BOTH, expand=1, padx = 10, pady = 5);
 	
 	#function that goes to the directory above the current
