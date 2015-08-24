@@ -32,21 +32,25 @@ class Explorer(Frame):
 		#create back button
 		frame1 = Frame(self, bg = '#383838');
 		frame1.pack(side=LEFT, fill = BOTH);
-		b = Button(frame1, bg = '#383838', fg = 'white', text = "Back", command = self.goBack);
+		b = Button(frame1, bg = '#383838', font = ('Helvetica', 10), fg = 'white', text = "Back", command = self.goBack);
 		b.pack();
 		
 		#scrollbar for listbox
 		self.scrollbar = Scrollbar(self);
 		self.scrollbar.pack(side=RIGHT, fill=Y);
 		
+		#create label and keep updated
+		self.labelDir = Label(self, font = 'Helvetica', fg = 'white', bg = '#383838', text = self.currentDir);
+		self.labelDir.pack()
+		
 		#create listbox that holds all directories in the current directory
-		self.lb = Listbox(self, background = "#383838")
+		self.lb = Listbox(self, font = ('Helvetica', 10), background = "#383838")
 		for i in range(len(self.listDir())):
 			self.lb.insert(END, self.listDir()[i]);
 			self.lb.itemconfig(i, {'fg':'white'});
 		
 		self.lb.bind("<Double-Button-1>", self.onselect);
-		self.lb.pack(side = RIGHT, fill=BOTH, expand=1, padx = 20, pady = 20);
+		self.lb.pack(side = RIGHT, fill=BOTH, expand=1, padx = 10, pady = 10);
 		
 		#scrollbar cont.
 		self.lb.config(yscrollcommand=self.scrollbar.set);
@@ -118,6 +122,7 @@ class Explorer(Frame):
 		self.currentDir = self.currentDir + '\\'
 		
 		#destroy current lb to make way for the new one (and scrollbar)
+		self.labelDir.destroy();
 		self.lb.destroy();
 		self.scrollbar.destroy();
 		
@@ -125,14 +130,18 @@ class Explorer(Frame):
 		self.scrollbar = Scrollbar(self);
 		self.scrollbar.pack(side=RIGHT, fill=Y);
 		
+		#create label and keep updated
+		self.labelDir = Label(self, font = 'Helvetica', fg = 'white', bg = '#383838', text = self.currentDir);
+		self.labelDir.pack()
+		
 		#create new lb, but update first
-		self.lb = Listbox(self, background = "#383838")
+		self.lb = Listbox(self, font = ('Helvetica', 10) , background = "#383838")
 		for i in range(len(self.listDir())):
 			self.lb.insert(END, self.listDir()[i]);
 			self.lb.itemconfig(i, {'fg':'white'});
 		
 		self.lb.bind("<Double-Button-1>", self.onselect);
-		self.lb.pack(side = RIGHT, fill=BOTH, expand=1, padx = 20, pady = 20);
+		self.lb.pack(side = RIGHT, fill=BOTH, expand=1, padx = 10, pady = 10);
 		
 		#scrollbar cont.
 		self.lb.config(yscrollcommand=self.scrollbar.set);
