@@ -14,7 +14,7 @@ class Explorer(Frame):
 		self.dirList = self.listDir();
 		
 		#call constructor from Frame, create parent to reference object
-		Frame.__init__(self, parent, background = "white");
+		Frame.__init__(self, parent, background = "#383838");
 		self.parent = parent;
 		
 		#call initUI
@@ -27,20 +27,23 @@ class Explorer(Frame):
 		self.parent.title("Explorer");
 		
 		#expand frame both directions
-		self.pack(fill=BOTH, expand = 1);
+		self.pack(side=LEFT, fill=BOTH, expand = 1);
 		
 		#create back button
-		b = Button(self, text = "<--", command = self.goBack);
-		b.pack(side="left", padx = 5, pady = 5);
+		frame1 = Frame(self, bg = '#383838');
+		frame1.pack(side=LEFT, fill = BOTH);
+		b = Button(frame1, bg = '#383838', fg = 'white', text = "Back", command = self.goBack);
+		b.pack();
 		
 		#scrollbar for listbox
 		self.scrollbar = Scrollbar(self);
 		self.scrollbar.pack(side=RIGHT, fill=Y);
 		
 		#create listbox that holds all directories in the current directory
-		self.lb = Listbox(self)
-		for i in self.listDir():
-			self.lb.insert(END, i);
+		self.lb = Listbox(self, background = "#383838")
+		for i in range(len(self.listDir())):
+			self.lb.insert(END, self.listDir()[i]);
+			self.lb.itemconfig(i, {'fg':'white'});
 		
 		self.lb.bind("<Double-Button-1>", self.onselect);
 		self.lb.pack(side = RIGHT, fill=BOTH, expand=1, padx = 20, pady = 20);
@@ -123,12 +126,13 @@ class Explorer(Frame):
 		self.scrollbar.pack(side=RIGHT, fill=Y);
 		
 		#create new lb, but update first
-		self.lb = Listbox(self)
-		for i in self.listDir():
-			self.lb.insert(END, i);
+		self.lb = Listbox(self, background = "#383838")
+		for i in range(len(self.listDir())):
+			self.lb.insert(END, self.listDir()[i]);
+			self.lb.itemconfig(i, {'fg':'white'});
 		
 		self.lb.bind("<Double-Button-1>", self.onselect);
-		self.lb.pack(side = RIGHT, fill=BOTH, expand=1, padx = 10, pady = 5);
+		self.lb.pack(side = RIGHT, fill=BOTH, expand=1, padx = 20, pady = 20);
 		
 		#scrollbar cont.
 		self.lb.config(yscrollcommand=self.scrollbar.set);
