@@ -108,6 +108,7 @@ class Explorer(Frame):
 			
 		else:
 			os.startfile(value);
+			
 	#update the list
 	def updateList(self):
 		self.listDir();
