@@ -45,8 +45,10 @@ class Explorer(Frame):
 		
 		#create listbox that holds all directories in the current directory
 		self.lb = Listbox(self, font = ('Helvetica', 10), background = "#383838")
-		for i in range(len(self.listDir())):
-			self.lb.insert(END, self.listDir()[i]);
+		loopList = self.listDir();
+		lenLoopList = len(self.listDir());
+		for i in range(lenLoopList):
+			self.lb.insert(END, loopList[i]);
 			self.lb.itemconfig(i, {'fg':'white'});
 		
 		self.lb.bind("<Double-Button-1>", self.onselect);
@@ -136,8 +138,10 @@ class Explorer(Frame):
 		
 		#create new lb, but update first
 		self.lb = Listbox(self, font = ('Helvetica', 10) , background = "#383838")
-		for i in range(len(self.listDir())):
-			self.lb.insert(END, self.listDir()[i]);
+		loopList = self.listDir();
+		lenLoopList = len(self.listDir());
+		for i in range(lenLoopList):
+			self.lb.insert(END, loopList[i]);
 			self.lb.itemconfig(i, {'fg':'white'});
 		
 		self.lb.bind("<Double-Button-1>", self.onselect);
